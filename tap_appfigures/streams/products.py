@@ -20,8 +20,7 @@ class ProductsStream(AppFiguresBase):
                 product_ids.append(product['id'])
 
                 # Only upsert messages which have changed
-                product_date = product['updated_date'] if product['updated_date']\
-                    else product['added_date']
+                product_date = product['updated_date'] if product['updated_date'] else product['added_date']
                 product_date = str_to_date(product_date)
 
                 product = tidy_dates(product)
