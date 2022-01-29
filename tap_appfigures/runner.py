@@ -17,10 +17,10 @@ class AppFiguresRunner:
     """
     The task runner
     """
-    def __init__(self, client, state, catalog):
+    def __init__(self, client, state, catalog, sub_product_ids=[]):
         self.client = client
         self.state = state
-        self.streams = [Stream(client, state, catalog) for Stream in AVAILABLE_STREAMS]
+        self.streams = [Stream(client, state, catalog, sub_product_ids) for Stream in AVAILABLE_STREAMS]
 
     def do_discover(self):
         """

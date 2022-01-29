@@ -29,7 +29,7 @@ class AppFiguresBase:
     KEY_PROPERTIES = []
     RESPONSE_LEVELS = 2
 
-    def __init__(self, client, state, catalog):
+    def __init__(self, client, state, catalog, sub_product_ids=[]):
         self.schema = None
 
         if catalog:
@@ -57,6 +57,7 @@ class AppFiguresBase:
             self.bookmark_date = client.start_date
 
         self.product_ids = []
+        self.sub_product_ids = sub_product_ids
 
     def sync(self):
         """
