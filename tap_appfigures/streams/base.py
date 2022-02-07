@@ -3,11 +3,12 @@ Stream base class
 """
 import inspect
 import os
-
+from datetime import datetime, timedelta
 import singer
 
 from tap_appfigures.utils import str_to_date, strings_to_floats, RequestError
 
+LOGGER = singer.get_logger()
 
 def stream_details_from_catalog(catalog, stream_name):
     """
@@ -92,24 +93,26 @@ class AppFiguresBase:
         A few of the streams work differently and override this method
         """
         start_date = str_to_date(self.bookmark_date).strftime('%Y-%m-%d')
+        end_date = min((datetime.today() - timedelta(1)) , str_to_date(self.bookmark_date) + timedelta(30)).strftime('%Y-%m-%d')
 
         try:
-            response = self.client.make_request(self.URI.format(start_date))
+            response = self.client.make_request(self.URI.format(start_date, end_date))
         except RequestError:
             return
 
         new_bookmark_date = self.bookmark_date
-
+        LOGGER.info(f"Start bookmark: {new_bookmark_date}")
         with singer.metrics.Counter('record_count', {'endpoint': self.STREAM_NAME}) as counter:
             for entry in self.traverse_nested_dicts(response.json(), self.RESPONSE_LEVELS):
                 new_bookmark_date = max(new_bookmark_date, entry['date'])
+                LOGGER.info(f"Max new bookmark: {new_bookmark_date}")
                 entry = strings_to_floats(entry)
                 singer.write_message(singer.RecordMessage(
                     stream=self.STREAM_NAME,
                     record=entry,
                 ))
             counter.increment()
-
+        LOGGER.warning(f"state: {self.state}")
         self.state = singer.write_bookmark(self.state, self.STREAM_NAME, 'last_record', new_bookmark_date)
 
     def get_class_path(self):

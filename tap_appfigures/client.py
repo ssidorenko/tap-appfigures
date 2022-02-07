@@ -52,7 +52,8 @@ class AppFiguresClient:
                 headers = {"Authorization": f"OAuth {','.join(f'{k}={v}' for k, v in params.items())}"}
                 response = requests.get(
                     self.BASE_URI + uri.lstrip("/"),
-                    headers=headers
+                    headers=headers,
+                    timeout=600
                 )
 
             else:
@@ -61,7 +62,8 @@ class AppFiguresClient:
                 response = requests.get(
                     self.BASE_URI + uri.lstrip("/"),
                     auth=auth,
-                    headers=headers
+                    headers=headers,
+                    timeout=600
                 )
         except Exception as e:
             LOGGER.error('Error [{}], request {} failed'.format(e, uri))
