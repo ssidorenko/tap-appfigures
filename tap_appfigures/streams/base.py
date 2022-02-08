@@ -105,7 +105,6 @@ class AppFiguresBase:
         with singer.metrics.Counter('record_count', {'endpoint': self.STREAM_NAME}) as counter:
             for entry in self.traverse_nested_dicts(response.json(), self.RESPONSE_LEVELS):
                 new_bookmark_date = max(new_bookmark_date, entry['date'])
-                LOGGER.info(f"Max new bookmark: {new_bookmark_date}")
                 entry = strings_to_floats(entry)
                 singer.write_message(singer.RecordMessage(
                     stream=self.STREAM_NAME,
