@@ -92,12 +92,13 @@ class AppFiguresBase:
         Most of the streams use this
         A few of the streams work differently and override this method
         """
-        start_date = str_to_date(self.bookmark_date).strftime('%Y-%m-%d')
+        start_date = (str_to_date(self.bookmark_date)-timedelta(15)).strftime('%Y-%m-%d')
         end_date = min((datetime.today() - timedelta(1)) , str_to_date(self.bookmark_date) + timedelta(30)).strftime('%Y-%m-%d')
 
         try:
             response = self.client.make_request(self.URI.format(start_date, end_date))
-        except RequestError:
+        except RequestError as ex:
+            LOGGER.error(ex)
             return
 
         new_bookmark_date = self.bookmark_date
@@ -111,8 +112,8 @@ class AppFiguresBase:
                     record=entry,
                 ))
             counter.increment()
-        LOGGER.warning(f"state: {self.state}")
         self.state = singer.write_bookmark(self.state, self.STREAM_NAME, 'last_record', new_bookmark_date)
+        LOGGER.warning(f"state: {self.state}")
 
     def get_class_path(self):
         """
