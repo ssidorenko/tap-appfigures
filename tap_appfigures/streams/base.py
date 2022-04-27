@@ -92,7 +92,7 @@ class AppFiguresBase:
         Most of the streams use this
         A few of the streams work differently and override this method
         """
-        start_date = (str_to_date(self.bookmark_date)-timedelta(15)).strftime('%Y-%m-%d')
+        start_date = (str_to_date(self.bookmark_date)-timedelta(7)).strftime('%Y-%m-%d')
         end_date = min((datetime.today() - timedelta(1)) , str_to_date(self.bookmark_date) + timedelta(30)).strftime('%Y-%m-%d')
 
         try:
