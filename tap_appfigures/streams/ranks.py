@@ -38,9 +38,9 @@ class RanksStream(AppFiguresBase):
                     _id = re.findall('\d+', data['message'])
                     LOGGER.warning(f"This app ID doesnt exist in inapp for ranks: {_id}, removing and trying again")
                     uri = re.sub(f",{_id[0]}|{_id[0]},", "", uri)
-                    if "," not in uri:
-                        break
                     data = self.client.make_request(uri).json()
+                    if data.get("status") == 400 and "," not in uri:
+                        break
                 if data.get("status") == 400:
                     continue
                 rank_dates = data['dates']
