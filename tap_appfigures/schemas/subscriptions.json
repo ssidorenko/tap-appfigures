@@ -1,0 +1,191 @@
+{
+    "type": [
+        "null",
+        "object"
+    ],
+    "additional_properties": false,
+    "properties": {
+
+        "all_active_subscriptions": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "active_subscriptions": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "paying_subscriptions": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "actual_revenue": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "mrr": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "gross_mrr": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "gross_revenue": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "activations": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "cancellations": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "churn": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "first_year_subscribers": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "non_first_year_subscribers": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "active_discounted_subscriptions": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "active_trials": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "new_trials": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "cancelled_trials": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "transitions_in": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "transitions_out": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "cancelled_subscriptions": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "new_subscriptions": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "trial_conversions": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "reactivations": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "renewals": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "active_grace": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "new_grace": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "grace_drop_off": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "grace_recovery": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "new_trial_grace": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "trial_grace_drop_off": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "trial_grace_recovery": {
+            "type": [
+                "null",
+                "number"
+            ]
+        }
+
+    }
+}
