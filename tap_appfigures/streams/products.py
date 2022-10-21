@@ -12,7 +12,7 @@ class ProductsStream(AppFiguresBase):
         bookmark_date_as_date = str_to_date(self.bookmark_date)
         max_product_date = bookmark_date_as_date
 
-        product_response = self.client.make_request("/products/mine/?include_inactive=true")
+        product_response = self.client.make_request("/products/mine/")
         product_ids = []
         with singer.metrics.Counter('record_count', {'endpoint': 'products'}) as counter:
 
