@@ -25,11 +25,11 @@ class ProductsStream(AppFiguresBase):
 
                 product = tidy_dates(product)
 
-                # if product_date > bookmark_date_as_date:
-                singer.write_message(singer.RecordMessage(
-                    stream='products',
-                    record=product,
-                ))
+                if product_date > bookmark_date_as_date:
+                    singer.write_message(singer.RecordMessage(
+                        stream='products',
+                        record=product,
+                    ))
                 max_product_date = max(max_product_date, product_date)
 
                 counter.increment()
