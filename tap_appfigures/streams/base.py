@@ -92,8 +92,8 @@ class AppFiguresBase:
         Most of the streams use this
         A few of the streams work differently and override this method
         """
-        start_date = (str_to_date(self.bookmark_date)-timedelta(7)).strftime('%Y-%m-%d')
-        end_date = min((datetime.today() - timedelta(1)), str_to_date(self.bookmark_date) + timedelta(10)).strftime('%Y-%m-%d')
+        start_date = (str_to_date(self.bookmark_date)-timedelta(4)).strftime('%Y-%m-%d')
+        end_date = min((datetime.today() - timedelta(1)), str_to_date(self.bookmark_date) + timedelta(3)).strftime('%Y-%m-%d')
 
         try:
             response = self.client.make_request(self.URI.format(start_date, end_date))
