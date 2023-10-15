@@ -8,10 +8,10 @@ from .ranks import RanksStream
 
 AVAILABLE_STREAMS = [
     ProductsStream,
-    SalesStream,
     RevenueStream,
+    SubscriptionsStream,
+    SalesStream,
     RatingsStream,
     UsageStream,
-    RanksStream,
-    SubscriptionsStream
+    RanksStream
 ]

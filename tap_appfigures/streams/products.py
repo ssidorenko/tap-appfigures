@@ -14,6 +14,7 @@ class ProductsStream(AppFiguresBase):
 
         product_response = self.client.make_request("/products/mine/")
         product_ids = []
+        records = []
         with singer.metrics.Counter('record_count', {'endpoint': 'products'}) as counter:
 
             for product in product_response.json().values():
@@ -25,15 +26,17 @@ class ProductsStream(AppFiguresBase):
 
                 product = tidy_dates(product)
 
-                if product_date > bookmark_date_as_date:
-                    singer.write_message(singer.RecordMessage(
-                        stream='products',
-                        record=product,
-                    ))
+                records.append(singer.RecordMessage(
+                    stream='products',
+                    record=product,
+                ))
+                if len(records) >= 1000:
+                    singer.write_message(records)
+                    records = []
                 max_product_date = max(max_product_date, product_date)
-
-                counter.increment()
-
+            singer.write_message(records)
+            counter.increment()
+            # Get a list of RecordMessage then write a message
         self.state = singer.write_bookmark(self.state, self.STREAM_NAME, 'last_record', date_to_str(max_product_date))
 
         self.product_ids = product_ids
