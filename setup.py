@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='tap-appfigures',
-      version='0.1.2',
+      version='0.2.0',
       description='Singer.io tap for extracting data from the AppFigures API',
       author='coen@compassmentis.com for Meow Wolf',
       classifiers=['Programming Language :: Python :: 3 :: Only'],
