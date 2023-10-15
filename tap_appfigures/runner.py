@@ -44,7 +44,7 @@ class AppFiguresRunner:
             stream.sync()
         except OSError as e:
             LOGGER.error(str(e))
-            exit(e.errno)
+            sys.exit(e.errno)
 
         except Exception as e:
             LOGGER.error(str(e))
