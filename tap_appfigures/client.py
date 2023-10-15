@@ -23,6 +23,7 @@ class AppFiguresClient:
     def __init__(self, config):
         self.start_date = config.get('start_date')
         self.auth_type = config.get("auth_type")
+        self.stream_name = config.get("stream_name")
         if self.auth_type == "oauth":
             self.client_key = config.get("client_key")
             self.client_secret = config.get("client_secret")
@@ -73,5 +74,5 @@ class AppFiguresClient:
             LOGGER.critical('Daily rate limit reached, after request for {}'.format(uri))
             sys.exit(1)
 
-        # response.raise_for_status()
+        response.raise_for_status()
         return response

@@ -71,6 +71,12 @@ class AppFiguresRunner:
         for stream in self.streams:
             if stream.STREAM_NAME == 'products':
                 continue
-
             stream.product_ids = product_ids
-            self.sync_stream(stream)
+            if self.client.stream_name:
+                if stream.STREAM_NAME == self.client.stream_name:
+                    LOGGER.info(f"Starting syncing for {self.client.stream_name}")
+                    self.sync_stream(stream)
+                else:
+                    continue
+            else:
+                self.sync_stream(stream)
