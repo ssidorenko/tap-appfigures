@@ -31,10 +31,13 @@ class ProductsStream(AppFiguresBase):
                     record=product,
                 ))
                 if len(records) >= 1000:
-                    singer.write_message(records)
-                    records = []
+                    if product_date > str_to_date(self.bookmark_date):
+                        singer.write_message(records)
+                        records = []
                 max_product_date = max(max_product_date, product_date)
-            singer.write_message(records)
+
+            if product_date > str_to_date(self.bookmark_date):
+                singer.write_message(records)
             counter.increment()
             # Get a list of RecordMessage then write a message
         self.state = singer.write_bookmark(self.state, self.STREAM_NAME, 'last_record', date_to_str(max_product_date))
