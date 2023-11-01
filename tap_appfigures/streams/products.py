@@ -36,7 +36,7 @@ class ProductsStream(AppFiguresBase):
                         records = []
                 max_product_date = max(max_product_date, product_date)
 
-            if product_date > str_to_date(self.bookmark_date):
+            if product_date > str_to_date(self.bookmark_date) and records:
                 singer.write_message(records)
             counter.increment()
             # Get a list of RecordMessage then write a message

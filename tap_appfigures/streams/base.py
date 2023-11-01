@@ -92,7 +92,7 @@ class AppFiguresBase:
         Most of the streams use this
         A few of the streams work differently and override this method
         """
-        start_date = (str_to_date(self.bookmark_date)-timedelta(1)).strftime('%Y-%m-%d')
+        start_date = (str_to_date(self.bookmark_date)-timedelta(14)).strftime('%Y-%m-%d')
         end_date = min((datetime.today() - timedelta(1)), str_to_date(self.bookmark_date) + timedelta(14)).strftime('%Y-%m-%d')
 
         try:
@@ -116,7 +116,8 @@ class AppFiguresBase:
                 if len(records) >= 2500:
                     singer.write_message(records)
                     records = []
-            singer.write_message(records)
+            if records:
+                singer.write_message(records)
             counter.increment()
         self.state = singer.write_bookmark(self.state, self.STREAM_NAME, 'last_record', new_bookmark_date)
         LOGGER.warning(f"state: {self.state}")
