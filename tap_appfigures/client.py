@@ -43,29 +43,29 @@ class AppFiguresClient:
         headers: Dict[str,str] = {}
         LOGGER.info("Making get request to {}".format(uri))
         try:
-            if self.auth_type == "oauth":
-                params = dict(
-                    oauth_signature_method="PLAINTEXT",
-                    oauth_consumer_key=self.client_key,
-                    oauth_token=self.access_token,
-                    oauth_signature=f"{self.client_secret}&{self.access_secret}"
-                )
-                headers = {"Authorization": f"OAuth {','.join(f'{k}={v}' for k, v in params.items())}"}
-                response = requests.get(
-                    self.BASE_URI + uri.lstrip("/"),
-                    headers=headers,
-                    timeout=600
-                )
+            # if self.auth_type == "oauth":
+            #     params = dict(
+            #         oauth_signature_method="PLAINTEXT",
+            #         oauth_consumer_key=self.client_key,
+            #         oauth_token=self.access_token,
+            #         oauth_signature=f"{self.client_secret}&{self.access_secret}"
+            #     )
+            #     headers = {"Authorization": f"OAuth {','.join(f'{k}={v}' for k, v in params.items())}"}
+            #     response = requests.get(
+            #         self.BASE_URI + uri.lstrip("/"),
+            #         headers=headers,
+            #         timeout=600
+            #     )
 
-            else:
-                headers = {"X-Client-Key": self.api_key}
-                auth = (self.username, self.password)
-                response = requests.get(
-                    self.BASE_URI + uri.lstrip("/"),
-                    auth=auth,
-                    headers=headers,
-                    timeout=600
-                )
+            # else:
+            headers = {"Authorization": "Bearer " + self.api_key}
+            # auth = (self.username, self.password)
+            response = requests.get(
+                self.BASE_URI + uri.lstrip("/"),
+                # auth=auth,
+                headers=headers,
+                timeout=600
+            )
         except Exception as e:
             LOGGER.error('Error [{}], request {} failed'.format(e, uri))
             raise RequestError

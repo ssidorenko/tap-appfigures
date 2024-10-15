@@ -5,7 +5,30 @@
     ],
     "additional_properties": false,
     "properties": {
-
+        "country": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "product_id": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "date": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "store": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
         "all_active_subscriptions": {
             "type": [
                 "null",

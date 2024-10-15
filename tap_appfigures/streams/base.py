@@ -36,7 +36,7 @@ class AppFiguresBase:
         if catalog:
             stream_details = stream_details_from_catalog(catalog, self.STREAM_NAME)
             if stream_details:
-                self.schema = stream_details.schema.to_dict()['properties']
+                self.schema = stream_details.schema.to_dict()#['properties']
                 self.key_properties = stream_details.key_properties
 
         if not self.schema:
@@ -46,7 +46,7 @@ class AppFiguresBase:
                         self.get_class_path(),
                         '../schemas/{}.json'.format(self.STREAM_NAME))))
             self.key_properties = self.KEY_PROPERTIES
-
+        LOGGER.warning(f"schema: {self.schema}")
         self.client = client
         self.state = state
         self.bookmark_date = singer.bookmarks.get_bookmark(
@@ -78,11 +78,15 @@ class AppFiguresBase:
         """
         for x in dict_.values():
             for y in x.values():
-
                 # The dict_ is nested two or three levels deep
-                if levels == 3:
+                if levels >= 3:
                     for z in y.values():
-                        yield z
+                        if levels == 4:
+                            for a in z.values():
+                                if a:
+                                    yield a
+                        else:
+                            yield z
                 else:
                     yield y
 
@@ -100,13 +104,16 @@ class AppFiguresBase:
         except RequestError as ex:
             LOGGER.error(ex)
             return
-
+        LOGGER.error(response.json())
         records = []
 
         new_bookmark_date = self.bookmark_date
         LOGGER.info(f"Start bookmark: {new_bookmark_date}")
         with singer.metrics.Counter('record_count', {'endpoint': self.STREAM_NAME}) as counter:
             for entry in self.traverse_nested_dicts(response.json(), self.RESPONSE_LEVELS):
+                # string to date
+                # entry['date'] = str_to_date(entry['date'])
+                LOGGER.error(f"Entry content: {entry}")
                 new_bookmark_date = max(new_bookmark_date, entry['date'])
                 entry = strings_to_floats(entry)
                 records.append(singer.RecordMessage(
@@ -117,7 +124,8 @@ class AppFiguresBase:
                     singer.write_message(records)
                     records = []
             if records:
-                singer.write_message(records)
+                for record in records:
+                    singer.write_message(record)
             counter.increment()
         self.state = singer.write_bookmark(self.state, self.STREAM_NAME, 'last_record', new_bookmark_date)
         LOGGER.warning(f"state: {self.state}")
@@ -128,18 +136,57 @@ class AppFiguresBase:
         """
         return os.path.dirname(inspect.getfile(self.__class__))
 
+    # def generate_catalog(self):
+    #     """
+    #     Builds the catalog entry for this stream
+    #     """
+    #     return dict(
+    #         tap_stream_id=self.STREAM_NAME,
+    #         stream=self.STREAM_NAME,
+    #         key_properties=self.key_properties,
+    #         schema=self.schema,
+    #         metadata={
+    #             'selected': True,
+    #             'schema-name': self.STREAM_NAME,
+    #             'is_view': False,
+    #         }
+    #     )
+
     def generate_catalog(self):
         """
         Builds the catalog entry for this stream
         """
-        return dict(
-            tap_stream_id=self.STREAM_NAME,
-            stream=self.STREAM_NAME,
-            key_properties=self.key_properties,
-            schema=self.schema,
-            metadata={
+        metadata_list = []
+
+        # Add top-level metadata entry with empty breadcrumb
+        metadata_list.append({
+            'metadata': {
                 'selected': True,
                 'schema-name': self.STREAM_NAME,
                 'is_view': False,
-            }
-        )
+                'inclusion': 'available'  # or 'selected' if you want it pre-selected
+            },
+            'breadcrumb': []
+        })
+
+        # Add metadata entries for each property in the schema
+        # print(self.schema)
+        for prop in self.schema['properties'].keys():
+            if prop in self.key_properties:
+                inclusion = 'automatic'
+            else:
+                inclusion = 'available'
+            metadata_list.append({
+                'metadata': {
+                    'inclusion': inclusion
+                },
+                'breadcrumb': ['properties', prop]
+            })
+
+        return {
+            'tap_stream_id': self.STREAM_NAME,
+            'stream': self.STREAM_NAME,
+            'key_properties': self.key_properties,
+            'schema': self.schema,
+            'metadata': metadata_list
+        }
