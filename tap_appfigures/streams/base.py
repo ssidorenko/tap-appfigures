@@ -113,7 +113,7 @@ class AppFiguresBase:
             for entry in self.traverse_nested_dicts(response.json(), self.RESPONSE_LEVELS):
                 # string to date
                 # entry['date'] = str_to_date(entry['date'])
-                LOGGER.error(f"Entry content: {entry}")
+                # LOGGER.info(f"Entry content: {entry}")
                 new_bookmark_date = max(new_bookmark_date, entry['date'])
                 entry = strings_to_floats(entry)
                 records.append(singer.RecordMessage(
@@ -121,8 +121,9 @@ class AppFiguresBase:
                     record=entry,
                 ))
                 if len(records) >= 2500:
-                    singer.write_message(records)
-                    records = []
+                    for record in records:
+                        singer.write_message(record)
+                        records = []
             if records:
                 for record in records:
                     singer.write_message(record)
